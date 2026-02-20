@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  /* Background & Foreground */
+  --background: #BCDDDC;
+  --foreground: #053229;
+
+  /* Palette colors */
+  --color-sapphire: #72B0AB;
+  --color-arctic: #BCDDDC;
+  --color-lace: #FFEDD1;
+  --color-bubblegum: #FDC1B4;
+  --color-ballet-slipper: #FE9179;
+  --color-sage: #CFB97E;
+  --color-pistachio: #B89D47;
+  --color-spruce: #355E58;
+  --color-peacock: #053229;
+
+  /* Semantic colors */
+  --color-primary: #72B0AB;
+  --color-secondary: #355E58;
+  --color-accent: #FE9179;
+  --color-muted: #CFB97E;
+  --color-surface: #BCDDDC;
+  --color-surface-alt: #FFEDD1;
+  --color-warning: #B89D47;
+  --color-error: #FE9179;
+  --color-success: #72B0AB;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+    /* Background & Foreground (inversés) */
+    --background: #053229;
+    --foreground: #BCDDDC;
+
+    /* Palette colors (ajustées pour le dark mode) */
+    --color-sapphire: #72B0AB;
+    --color-arctic: #355E58;
+    --color-lace: #B89D47;
+    --color-bubblegum: #FDC1B4;
+    --color-ballet-slipper: #FE9179;
+    --color-sage: #CFB97E;
+    --color-pistachio: #B89D47;
+    --color-spruce: #BCDDDC;
+    --color-peacock: #BCDDDC;
+
+    /* Semantic colors (dark) */
+    --color-primary: #72B0AB;
+    --color-secondary: #BCDDDC;
+    --color-accent: #FE9179;
+    --color-muted: #CFB97E;
+    --color-surface: #355E58;
+    --color-surface-alt: #053229;
+    --color-warning: #B89D47;
+    --color-error: #FE9179;
+    --color-success: #72B0AB;
+}
+
+@theme inline {
+  /* Base */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Palette */
+  --color-sapphire: var(--color-sapphire);
+  --color-arctic: var(--color-arctic);
+  --color-lace: var(--color-lace);
+  --color-bubblegum: var(--color-bubblegum);
+  --color-ballet-slipper: var(--color-ballet-slipper);
+  --color-sage: var(--color-sage);
+  --color-pistachio: var(--color-pistachio);
+  --color-spruce: var(--color-spruce);
+  --color-peacock: var(--color-peacock);
+
+  /* Semantic */
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-muted: var(--color-muted);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+  --color-success: var(--color-success);
+
+  /* Font */
+  --font-sans: var(--font-poppins);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
