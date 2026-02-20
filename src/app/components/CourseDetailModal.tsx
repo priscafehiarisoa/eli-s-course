@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { Course } from "@/app/data/courses";
 import {
   IconX,
@@ -209,9 +210,12 @@ export default function CourseDetailModal({
                 {spotsLeft} spots left
               </span>
             </div>
-            <button className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background shadow-sm transition-colors hover:bg-ballet-slipper">
+            <Link
+              href={`/enroll/${course.id}`}
+              className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background shadow-sm transition-colors hover:bg-ballet-slipper"
+            >
               Enroll now
-            </button>
+            </Link>
           </div>
         </div>
       </div>

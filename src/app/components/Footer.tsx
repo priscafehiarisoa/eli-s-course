@@ -21,20 +21,13 @@ const socialLinks = [
 ];
 
 const footerLinks = [
+
   {
-    title: "Platform",
-    links: [
-      { label: "Courses", href: "/courses" },
-      { label: "Pricing", href: "#" },
-      { label: "FAQ", href: "#" },
-    ],
-  },
-  {
-    title: "Company",
+    title: "About",
     links: [
       { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
+      { label: "Courses", href: "/courses" },
+      { label: "FAQ", href: "#" },
     ],
   },
   {
@@ -56,7 +49,7 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-8 py-16">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-5">
             {/* Contact info + CTA */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-3 space-y-6">
               <h3 className="text-lg font-bold text-arctic">
                 Get in touch
               </h3>

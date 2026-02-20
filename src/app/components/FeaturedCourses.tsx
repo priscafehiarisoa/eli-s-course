@@ -14,7 +14,7 @@ export default function FeaturedCourses() {
 
   return (
     <>
-      <section className="relative mx-auto max-w-7xl py-24">
+      <section className="relative mx-auto max-w-7xl py-24 mt-30">
         {/* Header */}
         <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>

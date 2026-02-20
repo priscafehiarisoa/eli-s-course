@@ -15,9 +15,9 @@ export default function Home() {
       />
 
       {/* Hero content */}
-      <section className="relative mx-auto flex max-w-7xl flex-col lg:flex-row items-center gap-12  pt-32 pb-20">
+      <section className="relative  mx-auto flex max-w-7xl flex-col lg:flex-row items-center gap-12  pt-32 pb-20">
         {/* Left side — text */}
-        <div className="flex max-w-xl flex-col gap-8 lg:w-1/2">
+        <div className="flex max-w-xl flex-col gap-8 lg:w-1/2 mt-40">
           <h1 className="text-5xl font-bold leading-tight tracking-tight text-foreground md:text-6xl mb-10 mt-10  ">
             We&apos;re changing the way people learn
           </h1>
@@ -33,26 +33,26 @@ export default function Home() {
             >
               Get started
             </Link>
-            <Link
-              href="/courses"
-              className="flex items-center gap-1 text-sm font-semibold text-foreground transition-colors hover:text-foreground/80"
-            >
-              Live demo
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
+            {/*<Link*/}
+            {/*  href="/courses"*/}
+            {/*  className="flex items-center gap-1 text-sm font-semibold text-foreground transition-colors hover:text-foreground/80"*/}
+            {/*>*/}
+            {/*  Live demo*/}
+            {/*  <svg*/}
+            {/*    xmlns="http://www.w3.org/2000/svg"*/}
+            {/*    width="16"*/}
+            {/*    height="16"*/}
+            {/*    viewBox="0 0 24 24"*/}
+            {/*    fill="none"*/}
+            {/*    stroke="currentColor"*/}
+            {/*    strokeWidth="2"*/}
+            {/*    strokeLinecap="round"*/}
+            {/*    strokeLinejoin="round"*/}
+            {/*  >*/}
+            {/*    <line x1="5" y1="12" x2="19" y2="12" />*/}
+            {/*    <polyline points="12 5 19 12 12 19" />*/}
+            {/*  </svg>*/}
+            {/*</Link>*/}
           </div>
         </div>
 

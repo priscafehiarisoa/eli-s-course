@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import { courses } from "@/app/data/courses";
 import type { Course, CourseLevel } from "@/app/data/courses";
 import CourseCard from "@/app/components/CourseCard";
@@ -19,15 +20,23 @@ const levels: ("all" | CourseLevel)[] = [
 export default function CoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [activeLevel, setActiveLevel] = useState<"all" | CourseLevel>("all");
+  const [search, setSearch] = useState("");
 
-  const filtered =
-    activeLevel === "all"
-      ? courses
-      : courses.filter((c) => c.level === activeLevel);
+  const filtered = courses.filter((c) => {
+    const matchesLevel = activeLevel === "all" || c.level === activeLevel;
+    const query = search.toLowerCase();
+    const matchesSearch =
+      !query ||
+      c.title.toLowerCase().includes(query) ||
+      c.description.toLowerCase().includes(query) ||
+      c.level.toLowerCase().includes(query) ||
+      c.modules.some((m) => m.title.toLowerCase().includes(query));
+    return matchesLevel && matchesSearch;
+  });
 
   return (
     <>
-      <div className="min-h-screen px-10">
+      <div className="min-h-screen px-10 mt-20">
         <div className="mx-auto max-w-7xl pt-32 pb-20">
           {/* Header */}
           <div className="mb-10">
@@ -43,21 +52,47 @@ export default function CoursesPage() {
             </p>
           </div>
 
-          {/* Level filter */}
-          <div className="mb-8 flex flex-wrap gap-2">
-            {levels.map((level) => (
-              <button
-                key={level}
-                onClick={() => setActiveLevel(level)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                  activeLevel === level
-                    ? "bg-accent text-background"
-                    : "bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
-                }`}
-              >
-                {level === "all" ? "All Levels" : level}
-              </button>
-            ))}
+          {/* Search bar + Level filter */}
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Search */}
+            <div className="relative w-full sm:max-w-sm">
+              <IconSearch
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/30"
+              />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search courses, modules…"
+                className="w-full rounded-full border border-foreground/10 bg-foreground/5 py-2.5 pl-10 pr-10 text-sm text-foreground placeholder:text-foreground/30 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground"
+                >
+                  <IconX size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* Level filter */}
+            <div className="flex flex-wrap gap-2">
+              {levels.map((level) => (
+                <button
+                  key={level}
+                  onClick={() => setActiveLevel(level)}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                    activeLevel === level
+                      ? "bg-accent text-background"
+                      : "bg-foreground/5 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
+                  }`}
+                >
+                  {level === "all" ? "All Levels" : level}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Grid */}
@@ -73,7 +108,7 @@ export default function CoursesPage() {
 
           {filtered.length === 0 && (
             <p className="mt-12 text-center text-foreground/40">
-              No courses found for this level.
+              No courses found{search ? ` for "${search}"` : " for this level"}.
             </p>
           )}
         </div>
