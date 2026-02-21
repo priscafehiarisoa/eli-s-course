@@ -287,7 +287,7 @@ export default function EnrollPage() {
                     onChange={handleChange}
                     className="mt-0.5 h-4 w-4 rounded border-foreground/30 accent-accent"
                   />
-                  <span className="text-xs leading-relaxed text-foreground/60">
+                  <span className="text-sm leading-relaxed text-foreground/60">
                     I agree that my personal data (last name, first name,
                     address, email) may be collected and processed as part of
                     my enrollment in this course. This data will be used solely
@@ -329,16 +329,7 @@ export default function EnrollPage() {
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-peacock/60 to-transparent" />
-                <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${levelColors[course.level]}`}
-                  >
-                    {course.level}
-                  </span>
-                  <span className="text-xs font-medium text-white/80">
-                    {levelLabels[course.level]}
-                  </span>
-                </div>
+
               </div>
 
               {/* Course info */}
@@ -346,7 +337,17 @@ export default function EnrollPage() {
                 <h2 className="text-lg font-bold text-foreground">
                   {course.title}
                 </h2>
-                <p className="text-xs text-foreground/50 leading-relaxed">
+                <div className=" bottom-3 left-4 flex items-center gap-2">
+                  <span
+                      className={`rounded-full px-2.5 py-0.5 text-sm font-bold ${levelColors[course.level]}`}
+                  >
+                    {course.level}
+                  </span>
+                  <span className="text-sm font-medium text-white/80">
+                    {levelLabels[course.level]}
+                  </span>
+                </div>
+                <p className="text-sm text-foreground/50 leading-relaxed">
                   {course.description}
                 </p>
 
@@ -374,14 +375,14 @@ export default function EnrollPage() {
 
                 {/* Modules preview */}
                 <div>
-                  <p className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-2">
+                  <p className="text-sm font-semibold text-foreground/50 uppercase tracking-wider mb-2">
                     Modules
                   </p>
                   <ul className="space-y-1.5">
                     {course.modules.map((mod, i) => (
                       <li
                         key={mod.title}
-                        className="flex items-start gap-2 text-xs text-foreground/50"
+                        className="flex items-start gap-2 text-sm text-foreground/50"
                       >
                         <IconCircleCheck
                           size={14}

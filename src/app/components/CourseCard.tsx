@@ -33,7 +33,7 @@ export default function CourseCard({ course, onSelect }: CourseCardProps) {
     <button
       type="button"
       onClick={() => onSelect(course)}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-background/10 bg-sapphire text-left shadow-sm transition-all hover:shadow-lg hover:-translate-y-1"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-background/10 bg-sapphire text-left shadow-sm transition-all hover:shadow-lg "
     >
       {/* Image */}
       <div className="relative h-48 w-full overflow-hidden">
@@ -42,17 +42,19 @@ export default function CourseCard({ course, onSelect }: CourseCardProps) {
           alt={course.title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Level badge */}
-        <span
-          className={`absolute top-3 left-3 rounded-full px-3 py-1 text-xs font-bold ${levelColors[course.level]}`}
-        >
-          {course.level}
-        </span>
+
       </div>
 
       {/* Content */}
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <h3 className="text-lg font-bold text-background">{course.title}</h3>
+        <h3 className="text-lg font-bold text-background">{course.title}
+        {/* Level badge */}
+        <span
+            className={` rounded-full mx-3 px-3 pt-1 pb-1 text-xs font-bold bg-peacock/20 text-bubblegum`}
+        >
+          {course.level}
+        </span>
+        </h3>
         <p className="text-sm text-balance/50 line-clamp-2">
           {course.description}
         </p>
