@@ -3,9 +3,9 @@ import { NextResponse } from "next/server";
 const swaggerSpec = {
   openapi: "3.0.0",
   info: {
-    title: "Nextkurs API",
+    title: "Online Deutschkurs mit Eliana API",
     version: "1.0.0",
-    description: "Documentation des APIs de la plateforme Nextkurs – gestion des cours, inscriptions et messages de contact.",
+    description: "Documentation des APIs de la plateforme Online Deutschkurs mit Eliana – gestion des cours, inscriptions et messages de contact.",
   },
   servers: [
     {

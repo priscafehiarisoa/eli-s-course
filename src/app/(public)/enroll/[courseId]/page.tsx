@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
   IconArrowLeft,
@@ -11,16 +11,9 @@ import {
   IconSend,
   IconCircleCheck,
 } from "@tabler/icons-react";
-import { courses } from "@/app/data/courses";
-
-const levelLabels: Record<string, string> = {
-  A1: "Beginner",
-  A2: "Elementary",
-  B1: "Intermediate",
-  B2: "Upper-Intermediate",
-  C1: "Advanced",
-  C2: "Proficiency",
-};
+import type { DbCourse } from "@/app/types/course";
+import { getCourseTitle, getCourseDescription } from "@/app/types/course";
+import { useLanguage } from "@/app/components/LanguageProvider";
 
 const levelColors: Record<string, string> = {
   A1: "bg-success/20 text-success",
@@ -31,10 +24,24 @@ const levelColors: Record<string, string> = {
   C2: "bg-bubblegum/20 text-bubblegum",
 };
 
+const DE_WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const DE_MONTHS = [
+  "Januar", "Februar", "März", "April", "Mai", "Juni",
+  "Juli", "August", "September", "Oktober", "November", "Dezember",
+];
+
+function formatDateDe(isoDate: string): string {
+  const d = new Date(isoDate);
+  return `${DE_WEEKDAYS[d.getUTCDay()]}, ${d.getUTCDate()}. ${DE_MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
 export default function EnrollPage() {
   const params = useParams();
-  const router = useRouter();
-  const course = courses.find((c) => c.id === params.courseId);
+  const { language, t } = useLanguage();
+
+  const [course, setCourse] = useState<DbCourse | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [loadingCourse, setLoadingCourse] = useState(true);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -48,37 +55,54 @@ export default function EnrollPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  if (!course) {
+  useEffect(() => {
+    if (!params?.courseId) return;
+    fetch(`/api/courses/${params.courseId}`)
+      .then((r) => {
+        if (!r.ok) { setNotFound(true); setLoadingCourse(false); return null; }
+        return r.json();
+      })
+      .then((data) => { if (data) { setCourse(data); setLoadingCourse(false); } })
+      .catch(() => { setNotFound(true); setLoadingCourse(false); });
+  }, [params?.courseId]);
+
+  if (loadingCourse) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-8 w-48 animate-pulse rounded-full bg-foreground/10" />
+      </div>
+    );
+  }
+
+  if (notFound || !course) {
     return (
       <div className="flex min-h-screen items-center justify-center px-10">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground">
-            Course not found
+            {t("enroll.notFound")}
           </h1>
           <p className="mt-2 text-foreground/50">
-            The course you&apos;re looking for doesn&apos;t exist.
+            {t("enroll.notFoundDesc")}
           </p>
           <Link
             href="/courses"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-background transition-colors hover:bg-ballet-slipper"
           >
             <IconArrowLeft size={16} />
-            Back to courses
+            {t("enroll.backToCourses")}
           </Link>
         </div>
       </div>
     );
   }
 
-  const startDate = new Date(course.startDate).toLocaleDateString("de-DE", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const spotsLeft = course.maxCapacity - course.enrolled;
+  const title = getCourseTitle(course, language);
+  const description = getCourseDescription(course, language);
+  const startDate = formatDateDe(course.startDate);
+  const enrolled = course._count?.enrollments ?? 0;
+  const spotsLeft = course.maxCapacity - enrolled;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -88,14 +112,37 @@ export default function EnrollPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!course) return;
     setSubmitting(true);
-    // Simulate submission
-    setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 1500);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/enrollments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: form.firstName,
+          lastName: form.lastName,
+          street: form.street,
+          postalCode: form.postalCode,
+          city: form.city,
+          email: form.email,
+          courseId: course.id,
+          locale: language,
+          consent: form.consent,
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json();
+        setSubmitError(data.error || t("enroll.errorGeneric"));
+      }
+    } catch {
+      setSubmitError(t("enroll.errorGeneric"));
+    }
+    setSubmitting(false);
   };
 
   if (submitted) {
@@ -106,25 +153,26 @@ export default function EnrollPage() {
             <IconCircleCheck size={32} className="text-success" />
           </div>
           <h1 className="text-2xl font-bold text-foreground">
-            Enrollment Confirmed!
+            {t("enroll.successTitle")}
           </h1>
           <p className="mt-3 text-foreground/60">
-            You have successfully enrolled in{" "}
-            <strong>{course.title}</strong>. A confirmation email has been sent
-            to <strong>{form.email}</strong>.
+            {t("enroll.successDesc", {
+              course: title,
+              email: form.email,
+            })}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/courses"
               className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background transition-colors hover:bg-ballet-slipper"
             >
-              Browse more courses
+              {t("enroll.browseMore")}
             </Link>
             <Link
               href="/"
               className="rounded-full border border-foreground/15 px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/5"
             >
-              Back to home
+              {t("enroll.backToHome")}
             </Link>
           </div>
         </div>
@@ -141,15 +189,17 @@ export default function EnrollPage() {
           className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-foreground/50 transition-colors hover:text-foreground"
         >
           <IconArrowLeft size={16} />
-          Back to courses
+          {t("enroll.backToCourses")}
         </Link>
 
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
           {/* Left — Form */}
           <div className="lg:col-span-3">
-            <h1 className="text-3xl font-bold text-foreground">Enrollment</h1>
+            <h1 className="text-3xl font-bold text-foreground">
+              {t("enroll.title")}
+            </h1>
             <p className="mt-2 text-foreground/50">
-              Fill in your details to enroll in this course.
+              {t("enroll.subtitle")}
             </p>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -160,7 +210,8 @@ export default function EnrollPage() {
                     htmlFor="lastName"
                     className="mb-1.5 block text-sm font-medium text-foreground/70"
                   >
-                    Nom <span className="text-accent">*</span>
+                    {t("enroll.lastName")}{" "}
+                    <span className="text-accent">*</span>
                   </label>
                   <input
                     id="lastName"
@@ -178,7 +229,8 @@ export default function EnrollPage() {
                     htmlFor="firstName"
                     className="mb-1.5 block text-sm font-medium text-foreground/70"
                   >
-                    Prénom <span className="text-accent">*</span>
+                    {t("enroll.firstName")}{" "}
+                    <span className="text-accent">*</span>
                   </label>
                   <input
                     id="firstName"
@@ -199,7 +251,8 @@ export default function EnrollPage() {
                   htmlFor="street"
                   className="mb-1.5 block text-sm font-medium text-foreground/70"
                 >
-                  Rue <span className="text-accent">*</span>
+                  {t("enroll.street")}{" "}
+                  <span className="text-accent">*</span>
                 </label>
                 <input
                   id="street"
@@ -220,7 +273,8 @@ export default function EnrollPage() {
                     htmlFor="postalCode"
                     className="mb-1.5 block text-sm font-medium text-foreground/70"
                   >
-                    Code postale <span className="text-accent">*</span>
+                    {t("enroll.postalCode")}{" "}
+                    <span className="text-accent">*</span>
                   </label>
                   <input
                     id="postalCode"
@@ -238,7 +292,8 @@ export default function EnrollPage() {
                     htmlFor="city"
                     className="mb-1.5 block text-sm font-medium text-foreground/70"
                   >
-                    Ville <span className="text-accent">*</span>
+                    {t("enroll.city")}{" "}
+                    <span className="text-accent">*</span>
                   </label>
                   <input
                     id="city"
@@ -259,7 +314,8 @@ export default function EnrollPage() {
                   htmlFor="email"
                   className="mb-1.5 block text-sm font-medium text-foreground/70"
                 >
-                  Adresse E-Mail <span className="text-accent">*</span>
+                  {t("enroll.email")}{" "}
+                  <span className="text-accent">*</span>
                 </label>
                 <input
                   id="email"
@@ -276,7 +332,7 @@ export default function EnrollPage() {
               {/* Consent */}
               <div className="rounded-xl border border-foreground/10 bg-foreground/[0.02] p-5">
                 <h3 className="text-sm font-semibold text-foreground mb-3">
-                  Data Protection
+                  {t("enroll.dataProtection")}
                 </h3>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
@@ -288,30 +344,38 @@ export default function EnrollPage() {
                     className="mt-0.5 h-4 w-4 rounded border-foreground/30 accent-accent"
                   />
                   <span className="text-sm leading-relaxed text-foreground/60">
-                    I agree that my personal data (last name, first name,
-                    address, email) may be collected and processed as part of
-                    my enrollment in this course. This data will be used solely
-                    for the management of my enrollment and will not be shared
-                    with third parties without my consent. I may request the
-                    deletion of my data at any time by contacting the training
-                    organization.{" "}
+                    {t("enroll.consentText")}{" "}
                     <span className="text-accent">*</span>
                   </span>
                 </label>
               </div>
 
+              {/* Course full warning */}
+              {spotsLeft <= 0 && (
+                <div className="rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-accent">
+                  {t("enroll.courseFull")}
+                </div>
+              )}
+
+              {/* Submit error */}
+              {submitError && (
+                <div className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-500">
+                  {submitError}
+                </div>
+              )}
+
               {/* Submit */}
               <button
                 type="submit"
-                disabled={submitting || !form.consent}
+                disabled={submitting || !form.consent || spotsLeft <= 0}
                 className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3 text-sm font-semibold text-background shadow-sm transition-colors hover:bg-ballet-slipper disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? (
-                  "Inscription en cours..."
+                  t("enroll.submitting")
                 ) : (
                   <>
                     <IconSend size={16} />
-                    Confirmer l&apos;inscription
+                    {t("enroll.submit")}
                   </>
                 )}
               </button>
@@ -322,52 +386,55 @@ export default function EnrollPage() {
           <div className="lg:col-span-2">
             <div className="sticky top-28 rounded-2xl border border-foreground/10 bg-foreground/[0.02] overflow-hidden">
               {/* Course image */}
-              <div className="relative h-40 w-full overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-peacock/60 to-transparent" />
-
-              </div>
+              {course.image && (
+                <div className="relative h-40 w-full overflow-hidden">
+                  <img
+                    src={course.image}
+                    alt={title}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-peacock/60 to-transparent" />
+                </div>
+              )}
 
               {/* Course info */}
               <div className="p-5 space-y-4">
                 <h2 className="text-lg font-bold text-foreground">
-                  {course.title}
+                  {title}
                 </h2>
-                <div className=" bottom-3 left-4 flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   <span
-                      className={`rounded-full px-2.5 py-0.5 text-sm font-bold ${levelColors[course.level]}`}
+                    className={`rounded-full px-2.5 py-0.5 text-sm font-bold ${levelColors[course.level]}`}
                   >
                     {course.level}
                   </span>
-                  <span className="text-sm font-medium text-white/80">
-                    {levelLabels[course.level]}
+                  <span className="text-sm font-medium text-foreground/60">
+                    {t(`levels.${course.level}`)}
                   </span>
                 </div>
                 <p className="text-sm text-foreground/50 leading-relaxed">
-                  {course.description}
+                  {description}
                 </p>
 
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-2.5 text-sm text-foreground/60">
                     <IconClock size={16} className="text-primary" />
                     <span>
-                      {course.schedule.days}, {course.schedule.time}
+                      {course.scheduleDays}, {course.scheduleTime}
                     </span>
                   </div>
                   <div className="flex items-center gap-2.5 text-sm text-foreground/60">
                     <IconCalendar size={16} className="text-primary" />
-                    <span>Ab {startDate}</span>
+                    <span>
+                      {t("enroll.startingFrom")} {startDate}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2.5 text-sm text-foreground/60">
                     <IconUsers size={16} className="text-primary" />
                     <span>
-                      {course.enrolled}/{course.maxCapacity} enrolled —{" "}
+                      {enrolled}/{course.maxCapacity} —{" "}
                       <strong className="text-accent">
-                        {spotsLeft} spots left
+                        {t("enroll.spotsLeft", { count: String(spotsLeft) })}
                       </strong>
                     </span>
                   </div>
@@ -376,19 +443,19 @@ export default function EnrollPage() {
                 {/* Modules preview */}
                 <div>
                   <p className="text-sm font-semibold text-foreground/50 uppercase tracking-wider mb-2">
-                    Modules
+                    {t("courseDetail.modules")}
                   </p>
                   <ul className="space-y-1.5">
-                    {course.modules.map((mod, i) => (
+                    {course.modules.map((mod) => (
                       <li
-                        key={mod.title}
+                        key={mod.id}
                         className="flex items-start gap-2 text-sm text-foreground/50"
                       >
                         <IconCircleCheck
                           size={14}
                           className="mt-0.5 shrink-0 text-primary"
                         />
-                        {mod.title}
+                        {mod.titleDe}
                       </li>
                     ))}
                   </ul>
@@ -396,7 +463,9 @@ export default function EnrollPage() {
 
                 {/* Price */}
                 <div className="border-t border-foreground/10 pt-4 flex items-center justify-between">
-                  <span className="text-xs text-foreground/50">Total</span>
+                  <span className="text-xs text-foreground/50">
+                    {t("enroll.totalLabel")}
+                  </span>
                   <span className="text-xl font-bold text-foreground">
                     {course.price}
                   </span>

@@ -40,5 +40,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# else
+.sfdx
+.idea
+.vscode
+
 # invoice
 ./src/app/learning/*
+
+/src/generated/prisma
+
+# runtime audit logs
+/data/audit/

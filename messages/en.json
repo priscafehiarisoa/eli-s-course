@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "courses": "Courses"
+  },
+  "home": {
+    "title": "We're changing the way people learn",
+    "subtitle": "Join thousands of students who have transformed their German skills with our interactive courses. Whether you're a beginner or looking to refine your fluency, we have the perfect course for you.",
+    "cta": "Get started"
+  },
+  "featured": {
+    "label": "Our Courses",
+    "title": "Start learning German today",
+    "subtitle": "From beginner to proficiency — pick the level that matches your goals and join a class that fits your schedule.",
+    "viewAll": "View all courses"
+  },
+  "courses": {
+    "label": "Browse",
+    "title": "All Courses",
+    "subtitle": "Find the perfect German course for your level. Filter by proficiency and start learning at your own pace.",
+    "searchPlaceholder": "Search courses, modules…",
+    "allLevels": "All Levels",
+    "noResults": "No courses found",
+    "noResultsFor": "No courses found for \"{search}\"",
+    "noResultsLevel": "No courses found for this level",
+    "viewDetails": "View details"
+  },
+  "levels": {
+    "A1": "Beginner",
+    "A2": "Elementary",
+    "B1": "Intermediate",
+    "B2": "Upper-Intermediate",
+    "C1": "Advanced",
+    "C2": "Proficiency"
+  },
+  "courseDetail": {
+    "schedule": "Schedule",
+    "startDate": "Start Date",
+    "enrolled": "Enrolled",
+    "modules": "Modules",
+    "courseModules": "Course Modules",
+    "spotsLeft": "{count} spots left",
+    "enrollNow": "Enroll now"
+  },
+  "enroll": {
+    "title": "Enrollment",
+    "subtitle": "Fill in your details to enroll in this course.",
+    "lastName": "Last Name",
+    "firstName": "First Name",
+    "street": "Street",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "email": "Email Address",
+    "dataProtection": "Data Protection",
+    "consentText": "I agree that my personal data (last name, first name, address, email) may be collected and processed as part of my enrollment in this course. This data will be used solely for the management of my enrollment and will not be shared with third parties without my consent. I may request the deletion of my data at any time by contacting the training organization.",
+    "submitting": "Submitting...",
+    "submit": "Confirm enrollment",
+    "backToCourses": "Back to courses",
+    "backToHome": "Back to home",
+    "notFound": "Course not found",
+    "notFoundDesc": "The course you're looking for doesn't exist.",
+    "successTitle": "Enrollment Confirmed!",
+    "successDesc": "You have successfully enrolled in {course}. A confirmation email has been sent to {email}.",
+    "browseMore": "Browse more courses",
+    "spotsLeft": "{count} spots left",
+    "startingFrom": "Starting",
+    "totalLabel": "Total",
+    "errorGeneric": "An error occurred. Please try again.",
+    "courseFull": "This course is full. No spots available."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "subject": "Subject",
+    "subjectPlaceholder": "Subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message...",
+    "cancel": "Cancel",
+    "send": "Send message",
+    "sending": "Sending...",
+    "sent": "Sent ✓"
+  },
+  "footer": {
+    "getInTouch": "Get in touch",
+    "sendEmail": "Send us an email",
+    "about": "About",
+    "aboutLink": "About",
+    "coursesLink": "Courses",
+    "faq": "FAQ",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "rights": "All rights reserved."
+  }
+}
+

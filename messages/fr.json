@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "courses": "Cours"
+  },
+  "home": {
+    "title": "Nous changeons la façon dont les gens apprennent",
+    "subtitle": "Rejoignez des milliers d'étudiants qui ont transformé leur allemand grâce à nos cours interactifs. Débutant ou avancé, nous avons le cours parfait pour vous.",
+    "cta": "Commencer"
+  },
+  "featured": {
+    "label": "Nos Cours",
+    "title": "Apprenez l'allemand dès aujourd'hui",
+    "subtitle": "Du débutant au niveau avancé — choisissez le niveau qui correspond à vos objectifs et rejoignez un cours adapté à votre emploi du temps.",
+    "viewAll": "Voir tous les cours"
+  },
+  "courses": {
+    "label": "Explorer",
+    "title": "Tous les cours",
+    "subtitle": "Trouvez le cours d'allemand parfait pour votre niveau. Filtrez par compétence et apprenez à votre rythme.",
+    "searchPlaceholder": "Rechercher des cours, modules…",
+    "allLevels": "Tous les niveaux",
+    "noResults": "Aucun cours trouvé",
+    "noResultsFor": "Aucun cours trouvé pour \"{search}\"",
+    "noResultsLevel": "Aucun cours trouvé pour ce niveau",
+    "viewDetails": "Voir les détails"
+  },
+  "levels": {
+    "A1": "Débutant",
+    "A2": "Élémentaire",
+    "B1": "Intermédiaire",
+    "B2": "Intermédiaire avancé",
+    "C1": "Avancé",
+    "C2": "Maîtrise"
+  },
+  "courseDetail": {
+    "schedule": "Horaires",
+    "startDate": "Date de début",
+    "enrolled": "Inscrits",
+    "modules": "Modules",
+    "courseModules": "Modules du cours",
+    "spotsLeft": "{count} places restantes",
+    "enrollNow": "S'inscrire"
+  },
+  "enroll": {
+    "title": "Inscription",
+    "subtitle": "Remplissez vos informations pour vous inscrire à ce cours.",
+    "lastName": "Nom",
+    "firstName": "Prénom",
+    "street": "Rue",
+    "postalCode": "Code postal",
+    "city": "Ville",
+    "email": "Adresse e-mail",
+    "dataProtection": "Protection des données",
+    "consentText": "J'accepte que mes données personnelles (nom, prénom, adresse, e-mail) soient collectées et traitées dans le cadre de mon inscription à ce cours. Ces données seront utilisées uniquement pour la gestion de mon inscription et ne seront pas partagées avec des tiers sans mon consentement. Je peux demander la suppression de mes données à tout moment en contactant l'organisme de formation.",
+    "submitting": "Inscription en cours...",
+    "submit": "Confirmer l'inscription",
+    "backToCourses": "Retour aux cours",
+    "backToHome": "Retour à l'accueil",
+    "notFound": "Cours introuvable",
+    "notFoundDesc": "Le cours que vous recherchez n'existe pas.",
+    "successTitle": "Inscription confirmée !",
+    "successDesc": "Vous êtes bien inscrit(e) à {course}. Un e-mail de confirmation a été envoyé à {email}.",
+    "browseMore": "Voir d'autres cours",
+    "spotsLeft": "{count} places restantes",
+    "startingFrom": "À partir du",
+    "totalLabel": "Total",
+    "errorGeneric": "Une erreur s'est produite. Veuillez réessayer.",
+    "courseFull": "Ce cours est complet. Aucune place disponible."
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "name": "Nom",
+    "namePlaceholder": "Votre nom",
+    "email": "E-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "subject": "Sujet",
+    "subjectPlaceholder": "Sujet",
+    "message": "Message",
+    "messagePlaceholder": "Écrivez votre message...",
+    "cancel": "Annuler",
+    "send": "Envoyer le message",
+    "sending": "Envoi en cours...",
+    "sent": "Envoyé ✓"
+  },
+  "footer": {
+    "getInTouch": "Nous contacter",
+    "sendEmail": "Envoyez-nous un e-mail",
+    "about": "À propos",
+    "aboutLink": "À propos",
+    "coursesLink": "Cours",
+    "faq": "FAQ",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "cookies": "Cookies",
+    "rights": "Tous droits réservés."
+  }
+}
+

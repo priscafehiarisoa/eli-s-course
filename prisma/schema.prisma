@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Admin Users ─────────────────────────────────────────
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hash
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Courses ─────────────────────────────────────────────
+
+model Course {
+  id          String   @id @default(cuid())
+  slug        String   @unique // e.g. "german-a1"
+  level       Level
+  image       String
+  price       String
+  maxCapacity Int
+  startDate   DateTime
+  scheduleDays String  // e.g. "Montag–Freitag"
+  scheduleTime String  // e.g. "18:00–20:00 Uhr"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  translations CourseTranslation[]
+  modules      CourseModule[]
+  enrollments  Enrollment[]
+}
+
+model CourseTranslation {
+  id          String @id @default(cuid())
+  courseId    String
+  locale      Locale
+  title       String
+  description String @db.Text
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, locale])
+}
+
+model CourseModule {
+  id          String @id @default(cuid())
+  courseId    String
+  order       Int
+  titleDe     String
+  descriptionDe String @db.Text
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+// ─── Enrollments ─────────────────────────────────────────
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  courseId    String
+  locale      Locale           @default(en)
+  firstName   String
+  lastName    String
+  street      String
+  postalCode  String
+  city        String
+  email       String
+  status      EnrollmentStatus @default(PENDING)
+  startDate   DateTime         // snapshot of the course start date at time of enrollment
+  paymentDate DateTime?        // null until payment is confirmed
+  consent     Boolean          @default(false) // RGPD: user accepted data usage policy
+  createdAt   DateTime         @default(now())
+
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([courseId, email])
+}
+
+// ─── Contact Messages ─────────────────────────────────────
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+// ─── Enums ───────────────────────────────────────────────
+
+enum Level {
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+}
+
+enum Locale {
+  en
+  fr
+  de
+}
+
+enum EnrollmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}

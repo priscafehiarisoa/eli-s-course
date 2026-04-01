@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import type { Course } from "@/app/data/courses";
+import type { DbCourse } from "@/app/types/course";
+import { getCourseTitle, getCourseDescription } from "@/app/types/course";
 import {
   IconX,
   IconCalendar,
@@ -10,6 +11,7 @@ import {
   IconBook,
   IconCircleCheck,
 } from "@tabler/icons-react";
+import { useLanguage } from "@/app/components/LanguageProvider";
 
 const levelColors: Record<string, string> = {
   A1: "bg-success/20 text-success",
@@ -20,58 +22,49 @@ const levelColors: Record<string, string> = {
   C2: "bg-bubblegum/20 text-bubblegum",
 };
 
-const levelLabels: Record<string, string> = {
-  A1: "Beginner",
-  A2: "Elementary",
-  B1: "Intermediate",
-  B2: "Upper-Intermediate",
-  C1: "Advanced",
-  C2: "Proficiency",
-};
+const DE_WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const DE_MONTHS = [
+  "Januar", "Februar", "März", "April", "Mai", "Juni",
+  "Juli", "August", "September", "Oktober", "November", "Dezember",
+];
+function formatDateDe(isoDate: string): string {
+  const d = new Date(isoDate);
+  return `${DE_WEEKDAYS[d.getUTCDay()]}, ${d.getUTCDate()}. ${DE_MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
 
 interface CourseDetailModalProps {
-  course: Course | null;
+  course: DbCourse | null;
   onClose: () => void;
 }
 
-export default function CourseDetailModal({
-  course,
-  onClose,
-}: CourseDetailModalProps) {
+export default function CourseDetailModal({ course, onClose }: CourseDetailModalProps) {
+  const { language, t } = useLanguage();
+
   if (!course) return null;
 
-  const startDate = new Date(course.startDate).toLocaleDateString("de-DE", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const spotsLeft = course.maxCapacity - course.enrolled;
-  const enrollmentPercent = Math.round(
-    (course.enrolled / course.maxCapacity) * 100,
-  );
+  const title = getCourseTitle(course, language);
+  const description = getCourseDescription(course, language);
+  const startDate = formatDateDe(course.startDate);
+  const enrolled = course._count?.enrollments ?? 0;
+  const spotsLeft = course.maxCapacity - enrolled;
+  const enrollmentPercent = Math.round((enrolled / course.maxCapacity) * 100);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-peacock/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-peacock/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
       <div className="relative mx-4 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-background shadow-2xl">
         {/* Hero image */}
         <div className="relative h-56 w-full shrink-0 overflow-hidden">
-          <img
-            src={course.image}
-            alt={course.title}
-            className="h-full w-full object-cover"
-          />
+          {course.image ? (
+            <img src={course.image} alt={title} className="h-full w-full object-cover" />
+          ) : (
+            <div className="h-full w-full bg-foreground/5" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-peacock/80 to-transparent" />
 
-          {/* Close button */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-background/20 text-white backdrop-blur-sm transition-colors hover:bg-background/40"
@@ -79,28 +72,22 @@ export default function CourseDetailModal({
             <IconX size={18} />
           </button>
 
-          {/* Title overlay */}
           <div className="absolute bottom-4 left-6 right-6">
             <div className="flex items-center gap-2 mb-2">
-              <span
-                className={`rounded-full px-3 py-1 text-xs font-bold ${levelColors[course.level]}`}
-              >
+              <span className={`rounded-full px-3 py-1 text-xs font-bold ${levelColors[course.level]}`}>
                 {course.level}
               </span>
               <span className="text-xs font-medium text-white/70">
-                {levelLabels[course.level]}
+                {t(`levels.${course.level}`)}
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-white">{course.title}</h2>
+            <h2 className="text-2xl font-bold text-white">{title}</h2>
           </div>
         </div>
 
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
-          {/* Description */}
-          <p className="text-sm leading-relaxed text-foreground/70">
-            {course.description}
-          </p>
+          <p className="text-sm leading-relaxed text-foreground/70">{description}</p>
 
           {/* Info grid */}
           <div className="grid grid-cols-2 gap-4">
@@ -109,15 +96,9 @@ export default function CourseDetailModal({
                 <IconClock size={20} className="text-primary" />
               </div>
               <div>
-                <p className="text-xs font-medium text-foreground/50">
-                  Schedule
-                </p>
-                <p className="text-sm font-semibold text-foreground">
-                  {course.schedule.days}
-                </p>
-                <p className="text-sm text-foreground/70">
-                  {course.schedule.time}
-                </p>
+                <p className="text-xs font-medium text-foreground/50">{t("courseDetail.schedule")}</p>
+                <p className="text-sm font-semibold text-foreground">{course.scheduleDays}</p>
+                <p className="text-sm text-foreground/70">{course.scheduleTime}</p>
               </div>
             </div>
 
@@ -126,12 +107,8 @@ export default function CourseDetailModal({
                 <IconCalendar size={20} className="text-primary" />
               </div>
               <div>
-                <p className="text-xs font-medium text-foreground/50">
-                  Start Date
-                </p>
-                <p className="text-sm font-semibold text-foreground">
-                  {startDate}
-                </p>
+                <p className="text-xs font-medium text-foreground/50">{t("courseDetail.startDate")}</p>
+                <p className="text-sm font-semibold text-foreground">{startDate}</p>
               </div>
             </div>
 
@@ -140,18 +117,10 @@ export default function CourseDetailModal({
                 <IconUsers size={20} className="text-primary" />
               </div>
               <div>
-                <p className="text-xs font-medium text-foreground/50">
-                  Enrolled
-                </p>
-                <p className="text-sm font-semibold text-foreground">
-                  {course.enrolled} / {course.maxCapacity}
-                </p>
-                {/* Progress bar */}
+                <p className="text-xs font-medium text-foreground/50">{t("courseDetail.enrolled")}</p>
+                <p className="text-sm font-semibold text-foreground">{enrolled} / {course.maxCapacity}</p>
                 <div className="mt-1 h-1.5 w-24 rounded-full bg-foreground/10">
-                  <div
-                    className="h-full rounded-full bg-primary"
-                    style={{ width: `${enrollmentPercent}%` }}
-                  />
+                  <div className="h-full rounded-full bg-primary" style={{ width: `${enrollmentPercent}%` }} />
                 </div>
               </div>
             </div>
@@ -161,60 +130,47 @@ export default function CourseDetailModal({
                 <IconBook size={20} className="text-accent" />
               </div>
               <div>
-                <p className="text-xs font-medium text-foreground/50">
-                  Modules
-                </p>
-                <p className="text-sm font-semibold text-foreground">
-                  {course.modules.length} modules
-                </p>
+                <p className="text-xs font-medium text-foreground/50">{t("courseDetail.modules")}</p>
+                <p className="text-sm font-semibold text-foreground">{course.modules.length} modules</p>
               </div>
             </div>
           </div>
 
           {/* Modules */}
-          <div>
-            <h3 className="mb-4 text-base font-bold text-foreground">
-              Course Modules
-            </h3>
-            <div className="space-y-3">
-              {course.modules.map((mod, i) => (
-                <div
-                  key={mod.title}
-                  className="flex gap-3 rounded-xl border border-foreground/5 bg-foreground/[0.02] p-4"
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15">
-                    <IconCircleCheck size={16} className="text-primary" />
+          {course.modules.length > 0 && (
+            <div>
+              <h3 className="mb-4 text-base font-bold text-foreground">{t("courseDetail.courseModules")}</h3>
+              <div className="space-y-3">
+                {course.modules.map((mod, i) => (
+                  <div key={mod.id} className="flex gap-3 rounded-xl border border-foreground/5 bg-foreground/[0.02] p-4">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15">
+                      <IconCircleCheck size={16} className="text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{i + 1}. {mod.titleDe}</p>
+                      <p className="mt-0.5 text-xs text-foreground/50">{mod.descriptionDe}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">
-                      {i + 1}. {mod.title}
-                    </p>
-                    <p className="mt-0.5 text-xs text-foreground/50">
-                      {mod.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Sticky footer */}
         <div className="shrink-0 border-t border-foreground/10 bg-background px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-2xl font-bold text-foreground">
-                {course.price}
-              </span>
+              <span className="text-2xl font-bold text-foreground">{course.price}</span>
               <span className="ml-2 text-sm text-foreground/50">
-                {spotsLeft} spots left
+                {t("courseDetail.spotsLeft", { count: String(spotsLeft) })}
               </span>
             </div>
             <Link
               href={`/enroll/${course.id}`}
               className="rounded-full bg-accent px-6 py-2.5 text-sm font-semibold text-background shadow-sm transition-colors hover:bg-ballet-slipper"
             >
-              Enroll now
+              {t("courseDetail.enrollNow")}
             </Link>
           </div>
         </div>

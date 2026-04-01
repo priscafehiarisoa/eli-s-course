@@ -3,8 +3,6 @@ import "./ui/globals.css";
 import { poppins } from "@/app/ui/fonts";
 import ThemeProvider from "@/app/components/ThemeProvider";
 import LanguageProvider from "@/app/components/LanguageProvider";
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
 
 export const metadata: Metadata = {
   title: "Eli's courses",
@@ -18,12 +16,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Force light mode — remove any stored dark theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              document.documentElement.classList.remove('dark');
+              try { localStorage.removeItem('theme'); } catch(e) {}
+            `,
+          }}
+        />
+      </head>
       <body className={`${poppins.variable} antialiased`}>
         <ThemeProvider>
           <LanguageProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
+            {children}
           </LanguageProvider>
         </ThemeProvider>
       </body>

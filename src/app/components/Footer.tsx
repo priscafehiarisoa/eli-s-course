@@ -7,11 +7,10 @@ import {
   IconBrandX,
   IconBrandLinkedin,
   IconBrandYoutube,
-  IconMapPin,
-  IconPhone,
   IconMail,
 } from "@tabler/icons-react";
 import ContactModal from "@/app/components/ContactModal";
+import { useLanguage } from "@/app/components/LanguageProvider";
 
 const socialLinks = [
   { icon: IconBrandInstagram, href: "#", label: "Instagram" },
@@ -20,28 +19,28 @@ const socialLinks = [
   { icon: IconBrandYoutube, href: "#", label: "YouTube" },
 ];
 
-const footerLinks = [
-
-  {
-    title: "About",
-    links: [
-      { label: "About", href: "#" },
-      { label: "Courses", href: "/courses" },
-      { label: "FAQ", href: "#" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy", href: "#" },
-      { label: "Terms", href: "#" },
-      { label: "Cookies", href: "#" },
-    ],
-  },
-];
-
 export default function Footer() {
   const [contactOpen, setContactOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const footerLinks = [
+    {
+      title: t("footer.about"),
+      links: [
+        { label: t("footer.aboutLink"), href: "#" },
+        { label: t("footer.coursesLink"), href: "/courses" },
+        { label: t("footer.faq"), href: "#" },
+      ],
+    },
+    {
+      title: t("footer.legal"),
+      links: [
+        { label: t("footer.privacy"), href: "#" },
+        { label: t("footer.terms"), href: "#" },
+        { label: t("footer.cookies"), href: "#" },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -51,31 +50,16 @@ export default function Footer() {
             {/* Contact info + CTA */}
             <div className="lg:col-span-3 space-y-6">
               <h3 className="text-lg font-bold text-arctic">
-                Get in touch
+                {t("footer.getInTouch")}
               </h3>
-
-              <div className="space-y-3">
-                <div className="flex items-start gap-3 text-sm font-semibold text-arctic/60">
-                  <IconMapPin size={18} className="mt-0.5 shrink-0 text-ballet-slipper" />
-                  <span>
-                    123 Learning Street
-                    <br />
-                    75001 Paris, France
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-semibold text-arctic/60">
-                  <IconPhone size={18} className="shrink-0 text-ballet-slipper" />
-                  <span>+33 1 23 45 67 89</span>
-                </div>
-              </div>
 
               {/* CTA — open contact modal */}
               <button
                 onClick={() => setContactOpen(true)}
-                className="flex items-center gap-2 rounded-full bg-ballet-slipper px-5 py-2.5 text-sm font-semibold text-peacock shadow-sm transition-colors hover:bg-bubblegum"
+                className="flex items-center gap-2 rounded-full bg-ballet-slipper px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-bubblegum"
               >
                 <IconMail size={16} />
-                Send us an email
+                {t("footer.sendEmail")}
               </button>
             </div>
 
@@ -104,8 +88,8 @@ export default function Footer() {
           {/* Bottom bar */}
           <div className="mt-14 flex flex-col items-center justify-between gap-4 font-semibold border-t border-primary/10 pt-8 sm:flex-row">
             <p className="text-sm text-arctic/40">
-              © {new Date().getFullYear()} Eli&apos;s Courses. All rights
-              reserved.
+              © {new Date().getFullYear()} Eli&apos;s Courses.{" "}
+              {t("footer.rights")}
             </p>
 
             {/* Social icons */}
@@ -130,4 +114,3 @@ export default function Footer() {
     </>
   );
 }
-

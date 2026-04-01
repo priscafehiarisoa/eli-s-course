@@ -1,0 +1,44 @@
+{
+  "enrollment": {
+    "en": {
+      "subject": "Your enrollment is confirmed - [course-name]",
+      "body": "Dear [student-full-name],\n\nThank you for enrolling in [course-name].\n\nHere are your course details:\n- Start date: [course-start-date]\n- Schedule: [course-schedule-days], [course-schedule-time]\n- Price: [course-price]\n\nWe look forward to seeing you!\n\nThe [platform-name] team"
+    },
+    "fr": {
+      "subject": "Votre inscription est confirmee - [course-name]",
+      "body": "Cher(e) [student-full-name],\n\nMerci de vous etre inscrit(e) a [course-name].\n\nDetails de votre cours :\n- Date de debut : [course-start-date]\n- Horaires : [course-schedule-days], [course-schedule-time]\n- Prix : [course-price]\n\nNous avons hate de vous retrouver !\n\nL'equipe [platform-name]"
+    },
+    "de": {
+      "subject": "Ihre Anmeldung ist bestaetigt - [course-name]",
+      "body": "Liebe(r) [student-full-name],\n\nVielen Dank fuer Ihre Anmeldung zu [course-name].\n\nIhre Kursdetails:\n- Startdatum: [course-start-date]\n- Zeitplan: [course-schedule-days], [course-schedule-time]\n- Preis: [course-price]\n\nWir freuen uns auf Sie!\n\nDas [platform-name]-Team"
+    }
+  },
+  "cancellation": {
+    "en": {
+      "subject": "Your enrollment has been cancelled - [course-name]",
+      "body": "Dear [student-full-name],\n\nYour enrollment for [course-name] has been cancelled.\n\nIf you have any questions, please contact us.\n\nThe [platform-name] team"
+    },
+    "fr": {
+      "subject": "Votre inscription a ete annulee - [course-name]",
+      "body": "Cher(e) [student-full-name],\n\nVotre inscription a [course-name] a ete annulee.\n\nSi vous avez des questions, contactez-nous.\n\nL'equipe [platform-name]"
+    },
+    "de": {
+      "subject": "Ihre Anmeldung wurde storniert - [course-name]",
+      "body": "Liebe(r) [student-full-name],\n\nIhre Anmeldung zu [course-name] wurde storniert.\n\nBei Fragen kontaktieren Sie uns bitte.\n\nDas [platform-name]-Team"
+    }
+  },
+  "payment": {
+    "en": {
+      "subject": "Your payment has been confirmed - [course-name]",
+      "body": "Dear [student-full-name],\n\nYour payment for [course-name] has been confirmed on [payment-date].\n\nCourse details:\n- Start date: [course-start-date]\n- Schedule: [course-schedule-days], [course-schedule-time]\n- Price: [course-price]\n\nThe [platform-name] team"
+    },
+    "fr": {
+      "subject": "Votre paiement a été confirmée - [course-name]",
+      "body": "Cher(e) [student-full-name],\n\nVotre paiement pour [course-name] a ete confirme le [payment-date].\n\nDetails du cours :\n- Date de debut : [course-start-date]\n- Horaires : [course-schedule-days], [course-schedule-time]\n- Prix : [course-price]\n\nL'equipe [platform-name]"
+    },
+    "de": {
+      "subject": "Ihre Zahlung wurde bestaetigt - [course-name]",
+      "body": "Liebe(r) [student-full-name],\n\nIhre Zahlung fuer [course-name] wurde am [payment-date] bestaetigt.\n\nKursdetails:\n- Startdatum: [course-start-date]\n- Zeitplan: [course-schedule-days], [course-schedule-time]\n- Preis: [course-price]\n\nDas [platform-name]-Team"
+    }
+  }
+}

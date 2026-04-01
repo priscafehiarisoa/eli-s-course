@@ -2,60 +2,31 @@
 
 :root {
   /* Background & Foreground */
-  --background: #BCDDDC;
-  --foreground: #053229;
+  --background: #FFFFFF;
+  --foreground: #014040;
+  --grid-line: rgba(1, 64, 64, 0.07);
 
   /* Palette colors */
-  --color-sapphire: #72B0AB;
-  --color-arctic: #BCDDDC;
-  --color-lace: #FFEDD1;
-  --color-bubblegum: #FDC1B4;
-  --color-ballet-slipper: #FE9179;
-  --color-sage: #CFB97E;
-  --color-pistachio: #B89D47;
-  --color-spruce: #355E58;
-  --color-peacock: #053229;
+  --color-sapphire: #D5F2EA;
+  --color-arctic: #D5F2EA;
+  --color-lace: #F2E9BD;
+  --color-bubblegum: #F25F29;
+  --color-ballet-slipper: #BF613F;
+  --color-sage: #BF613F;
+  --color-pistachio: #F25F29;
+  --color-spruce: #014040;
+  --color-peacock: #014040;
 
   /* Semantic colors */
-  --color-primary: #72B0AB;
-  --color-secondary: #355E58;
-  --color-accent: #FE9179;
-  --color-muted: #CFB97E;
-  --color-surface: #BCDDDC;
-  --color-surface-alt: #FFEDD1;
-  --color-warning: #B89D47;
-  --color-error: #FE9179;
-  --color-success: #72B0AB;
-}
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-.dark {
-    /* Background & Foreground (inversés) */
-    --background: #053229;
-    --foreground: #BCDDDC;
-
-    /* Palette colors (ajustées pour le dark mode) */
-    --color-sapphire: #72B0AB;
-    --color-arctic: #355E58;
-    --color-lace: #B89D47;
-    --color-bubblegum: #FDC1B4;
-    --color-ballet-slipper: #FE9179;
-    --color-sage: #CFB97E;
-    --color-pistachio: #B89D47;
-    --color-spruce: #BCDDDC;
-    --color-peacock: #BCDDDC;
-
-    /* Semantic colors (dark) */
-    --color-primary: #72B0AB;
-    --color-secondary: #BCDDDC;
-    --color-accent: #FE9179;
-    --color-muted: #CFB97E;
-    --color-surface: #355E58;
-    --color-surface-alt: #053229;
-    --color-warning: #B89D47;
-    --color-error: #FE9179;
-    --color-success: #72B0AB;
+  --color-primary: #014040;
+  --color-secondary: #BF613F;
+  --color-accent: #F25F29;
+  --color-muted: #F2E9BD;
+  --color-surface: #D5F2EA;
+  --color-surface-alt: #F2E9BD;
+  --color-warning: #F2E9BD;
+  --color-error: #F25F29;
+  --color-success: #014040;
 }
 
 @theme inline {
@@ -94,3 +65,11 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+.grid-overlay {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 300px 300px;
+}
+

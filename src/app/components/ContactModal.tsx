@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { IconX, IconSend } from "@tabler/icons-react";
+import { useLanguage } from "@/app/components/LanguageProvider";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface ContactModalProps {
 }
 
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,7 +49,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
       <div className="relative w-full max-w-lg mx-4 rounded-2xl bg-background border border-foreground/10 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-foreground/10">
-          <h2 className="text-lg font-semibold text-foreground">Contact Us</h2>
+          <h2 className="text-lg font-semibold text-foreground">
+            {t("contact.title")}
+          </h2>
           <button
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-full text-foreground/50 transition-colors hover:bg-foreground/10 hover:text-foreground"
@@ -61,7 +65,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-                Name
+                {t("contact.name")}
               </label>
               <input
                 type="text"
@@ -71,12 +75,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 className="w-full rounded-lg border border-foreground/15 bg-foreground/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                placeholder="Your name"
+                placeholder={t("contact.namePlaceholder")}
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-                Email
+                {t("contact.email")}
               </label>
               <input
                 type="email"
@@ -86,14 +90,14 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 className="w-full rounded-lg border border-foreground/15 bg-foreground/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                placeholder="you@example.com"
+                placeholder={t("contact.emailPlaceholder")}
               />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-              Subject
+              {t("contact.subject")}
             </label>
             <input
               type="text"
@@ -103,13 +107,13 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 setFormData({ ...formData, subject: e.target.value })
               }
               className="w-full rounded-lg border border-foreground/15 bg-foreground/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-              placeholder="Subject"
+              placeholder={t("contact.subjectPlaceholder")}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-              Message
+              {t("contact.message")}
             </label>
             <textarea
               required
@@ -119,7 +123,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 setFormData({ ...formData, message: e.target.value })
               }
               className="w-full rounded-lg border border-foreground/15 bg-foreground/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
-              placeholder="Write your message..."
+              placeholder={t("contact.messagePlaceholder")}
             />
           </div>
 
@@ -130,23 +134,23 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               onClick={onClose}
               className="rounded-lg px-4 py-2 text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
             >
-              Cancel
+              {t("contact.cancel")}
             </button>
             <button
               type="submit"
               disabled={sending || sent}
               className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-background shadow-sm transition-colors hover:bg-ballet-slipper disabled:opacity-60"
             >
-              {sent ? (
-                "Sent ✓"
-              ) : sending ? (
-                "Sending..."
-              ) : (
-                <>
-                  <IconSend size={16} />
-                  Send message
-                </>
-              )}
+              {sent
+                ? t("contact.sent")
+                : sending
+                ? t("contact.sending")
+                : (
+                  <>
+                    <IconSend size={16} />
+                    {t("contact.send")}
+                  </>
+                )}
             </button>
           </div>
         </form>
@@ -154,4 +158,3 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     </div>
   );
 }
-

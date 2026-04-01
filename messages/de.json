@@ -1,0 +1,92 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "courses": "Kurse"
+  },
+  "home": {
+    "title": "Wir verändern die Art, wie Menschen lernen",
+    "subtitle": "Schließen Sie sich Tausenden von Studierenden an, die ihre Deutschkenntnisse mit unseren interaktiven Kursen verbessert haben. Ob Anfänger oder Fortgeschrittener – wir haben den passenden Kurs für Sie.",
+    "cta": "Loslegen"
+  },
+  "featured": {
+    "label": "Unsere Kurse",
+    "title": "Beginnen Sie noch heute Deutsch zu lernen",
+    "subtitle": "Von Anfänger bis Fortgeschrittener — wählen Sie das Niveau, das Ihren Zielen entspricht, und finden Sie einen Kurs, der in Ihren Zeitplan passt.",
+    "viewAll": "Alle Kurse anzeigen"
+  },
+  "courses": {
+    "label": "Entdecken",
+    "title": "Alle Kurse",
+    "subtitle": "Finden Sie den perfekten Deutschkurs für Ihr Niveau. Filtern Sie nach Sprachkenntnissen und lernen Sie in Ihrem eigenen Tempo.",
+    "searchPlaceholder": "Kurse, Module suchen…",
+    "allLevels": "Alle Niveaus",
+    "noResults": "Keine Kurse gefunden",
+    "noResultsFor": "Keine Kurse für \"{search}\" gefunden",
+    "noResultsLevel": "Keine Kurse für dieses Niveau gefunden",
+    "viewDetails": "Details anzeigen"
+  },
+  "courseDetail": {
+    "schedule": "Zeitplan",
+    "startDate": "Startdatum",
+    "enrolled": "Angemeldet",
+    "modules": "Module",
+    "courseModules": "Kursmodule",
+    "spotsLeft": "Noch {count} Plätze frei",
+    "enrollNow": "Jetzt anmelden"
+  },
+  "enroll": {
+    "title": "Anmeldung",
+    "subtitle": "Geben Sie Ihre Daten ein, um sich für diesen Kurs anzumelden.",
+    "lastName": "Nachname",
+    "firstName": "Vorname",
+    "street": "Straße",
+    "postalCode": "Postleitzahl",
+    "city": "Stadt",
+    "email": "E-Mail-Adresse",
+    "dataProtection": "Datenschutz",
+    "consentText": "Ich stimme zu, dass meine persönlichen Daten (Nachname, Vorname, Adresse, E-Mail) im Rahmen meiner Anmeldung für diesen Kurs erhoben und verarbeitet werden. Diese Daten werden ausschließlich für die Verwaltung meiner Anmeldung verwendet und ohne meine Zustimmung nicht an Dritte weitergegeben. Ich kann jederzeit die Löschung meiner Daten beantragen.",
+    "submitting": "Wird angemeldet...",
+    "submit": "Anmeldung bestätigen",
+    "backToCourses": "Zurück zu den Kursen",
+    "backToHome": "Zurück zur Startseite",
+    "notFound": "Kurs nicht gefunden",
+    "notFoundDesc": "Der gesuchte Kurs existiert nicht.",
+    "successTitle": "Anmeldung bestätigt!",
+    "successDesc": "Sie haben sich erfolgreich für {course} angemeldet. Eine Bestätigungs-E-Mail wurde an {email} gesendet.",
+    "browseMore": "Weitere Kurse entdecken",
+    "spotsLeft": "Noch {count} Plätze frei",
+    "startingFrom": "Ab",
+    "totalLabel": "Gesamt",
+    "errorGeneric": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "courseFull": "Dieser Kurs ist ausgebucht. Keine Plätze verfügbar."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "name": "Name",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "sie@beispiel.de",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Betreff",
+    "message": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie Ihre Nachricht...",
+    "cancel": "Abbrechen",
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "sent": "Gesendet ✓"
+  },
+  "footer": {
+    "getInTouch": "Kontakt aufnehmen",
+    "sendEmail": "Schreiben Sie uns eine E-Mail",
+    "about": "Über uns",
+    "aboutLink": "Über uns",
+    "coursesLink": "Kurse",
+    "faq": "FAQ",
+    "legal": "Rechtliches",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "cookies": "Cookies",
+    "rights": "Alle Rechte vorbehalten."
+  }
+}
+

@@ -1,36 +1,35 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import en from "../../../messages/en.json";
+import fr from "../../../messages/fr.json";
+import de from "../../../messages/de.json";
 
-type Language = "en" | "fr";
+export type Language = "en" | "fr" | "de";
 
-type Translations = {
-  courses: string;
-  home: string;
-  language: string;
-};
+const messages: Record<Language, Record<string, unknown>> = { en, fr, de };
 
-const translations: Record<Language, Translations> = {
-  en: {
-    courses: "Courses",
-    home: "Home",
-    language: "Language",
-  },
-  fr: {
-    courses: "Cours",
-    home: "Accueil",
-    language: "Langue",
-  },
-};
+function getNestedValue(obj: Record<string, unknown>, path: string): string {
+  const keys = path.split(".");
+  let current: unknown = obj;
+  for (const key of keys) {
+    if (current && typeof current === "object") {
+      current = (current as Record<string, unknown>)[key];
+    } else {
+      return path;
+    }
+  }
+  return typeof current === "string" ? current : path;
+}
 
 const LanguageContext = createContext<{
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: Translations;
+  t: (key: string, params?: Record<string, string>) => string;
 }>({
   language: "en",
   setLanguage: () => {},
-  t: translations.en,
+  t: (key) => key,
 });
 
 export function useLanguage() {
@@ -44,12 +43,19 @@ export default function LanguageProvider({
 }) {
   const [language, setLanguage] = useState<Language>("en");
 
+  const t = (key: string, params?: Record<string, string>): string => {
+    let value = getNestedValue(messages[language] as Record<string, unknown>, key);
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        value = value.replace(`{${k}}`, v);
+      });
+    }
+    return value;
+  };
+
   return (
-    <LanguageContext.Provider
-      value={{ language, setLanguage, t: translations[language] }}
-    >
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
 }
-
