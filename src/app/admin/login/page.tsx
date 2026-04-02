@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { IconLock, IconMail } from "@tabler/icons-react";
 
 export default function AdminLoginPage() {
@@ -10,7 +9,6 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +25,7 @@ export default function AdminLoginPage() {
       setError("E-mail ou mot de passe incorrect.");
       setLoading(false);
     } else {
-      router.push("/admin/cours");
+      globalThis.location.href = "/admin";
     }
   };
 

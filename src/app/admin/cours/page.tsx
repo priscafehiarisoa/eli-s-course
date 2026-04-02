@@ -42,7 +42,7 @@ export default function AdminCoursesPage() {
 
   const fetchCourses = async () => {
     setLoading(true);
-    const res = await fetch("/api/courses");
+    const res = await fetch("/api/courses?includePast=true");
     const data = await res.json();
     setCourses(data);
     setLoading(false);

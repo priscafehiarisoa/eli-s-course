@@ -115,7 +115,7 @@ export default function AdminEnrollmentsPage() {
 
   // Load courses for filter dropdown
   useEffect(() => {
-    fetch("/api/courses").then((r) => r.json()).then((data) => {
+    fetch("/api/courses?includePast=true").then((r) => r.json()).then((data) => {
       setCourses(
         data.map((c: any) => ({
           slug: c.id,

@@ -11,19 +11,57 @@ import { useLanguage } from "@/app/components/LanguageProvider";
 export default function FeaturedCourses() {
   const [courses, setCourses] = useState<DbCourse[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<DbCourse | null>(null);
+  const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
     fetch("/api/courses")
-      .then((r) => { if (!r.ok) throw new Error(); return r.json(); })
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+        return r.json();
+      })
       .then((data: DbCourse[]) => setCourses(data.slice(0, 3)))
-      .catch(() => setFetchError(true));
+      .catch(() => setFetchError(true))
+      .finally(() => setLoading(false));
   }, []);
+
+  let content: React.ReactNode;
+  if (fetchError) {
+    content = (
+      <p className="text-center text-sm text-foreground/50 py-12">
+        Impossible de charger les cours pour le moment.
+      </p>
+    );
+  } else if (loading) {
+    content = (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-72 animate-pulse rounded-2xl bg-foreground/5" />
+        ))}
+      </div>
+    );
+  } else if (courses.length === 0) {
+    content = (
+      <p className="text-center text-sm text-foreground/50 py-12">
+        Aucun cours a venir pour le moment.
+      </p>
+    );
+  } else {
+    content = (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {courses.map((course) => (
+          <CourseCard key={course.id} course={course} onSelect={setSelectedCourse} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
-      <section className="relative mx-auto max-w-7xl py-24 mt-30">
+      <section className="relative mx-auto max-w-7xl py-24 ">
         {/* Header */}
         <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -47,23 +85,7 @@ export default function FeaturedCourses() {
         </div>
 
         {/* Cards grid */}
-        {fetchError ? (
-          <p className="text-center text-sm text-foreground/50 py-12">
-            Impossible de charger les cours pour le moment.
-          </p>
-        ) : courses.length === 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-72 animate-pulse rounded-2xl bg-foreground/5" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {courses.map((course) => (
-              <CourseCard key={course.id} course={course} onSelect={setSelectedCourse} />
-            ))}
-          </div>
-        )}
+        {content}
       </section>
 
       <CourseDetailModal course={selectedCourse} onClose={() => setSelectedCourse(null)} />
