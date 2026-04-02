@@ -5,8 +5,11 @@ import ThemeProvider from "@/app/components/ThemeProvider";
 import LanguageProvider from "@/app/components/LanguageProvider";
 
 export const metadata: Metadata = {
-  title: "Eli's courses",
-  description: "Eli's courses",
+  title: "Online Deutschkurs mit Eliana",
+  description: "Online Deutschkurs mit Eliana",
+  icons: {
+    apple: "/logo/logo.png", // ou "/logo/votre-logo.png"
+  },
 };
 
 export default function RootLayout({

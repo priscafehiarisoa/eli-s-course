@@ -292,76 +292,78 @@ export default function AdminEnrollmentsPage() {
           <div className="py-20 text-center text-foreground/40">Loading...</div>
         ) : (
           <div className="overflow-hidden rounded-2xl border border-foreground/10">
-            <table className="w-full text-sm">
-              <thead className="bg-foreground/5 text-left">
-                <tr>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Student</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Course</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">
-                    <span className="flex items-center gap-1"><IconCalendar size={13} /> Start Date</span>
-                  </th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">
-                    <span className="flex items-center gap-1"><IconCreditCard size={13} /> Payment</span>
-                  </th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Status</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-foreground/5">
-                {filtered.map((e) => {
-                  const courseTitle = getCourseTitle(e.course.translations, e.course.slug);
-                  return (
-                    <tr key={e.id} className="hover:bg-foreground/[0.02]">
-                      <td className="px-5 py-4">
-                        <p className="font-semibold text-foreground">{e.lastName} {e.firstName}</p>
-                        <p className="text-xs text-foreground/40">{e.email}</p>
-                        <p className="text-xs text-foreground/30">{e.city}</p>
-                      </td>
-                      <td className="px-5 py-4">
-                        <p className="font-medium text-foreground">{courseTitle}</p>
-                        <span className="mt-1 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent">
-                          {e.course.level}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4 text-foreground/60 text-xs">
-                        {formatDate(e.startDate)}
-                      </td>
-                      <td className="px-5 py-4 text-foreground/60 text-xs">
-                        {e.paymentDate
-                          ? formatDate(e.paymentDate)
-                          : <span className="text-foreground/30">—</span>}
-                      </td>
-                      <td className="px-5 py-4">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLES[e.status]}`}>
-                          {STATUS_ICONS[e.status]}
-                          {e.status.charAt(0) + e.status.slice(1).toLowerCase()}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                          {e.status !== "CANCELLED" && (
-                            <button
-                              onClick={() => cancelEnrollment(e.id)}
-                              disabled={updating === e.id}
-                              className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600 hover:bg-red-100 disabled:opacity-50">
-                              Annuler l'inscription
-                            </button>
-                          )}
-                          {e.status !== "CONFIRMED" && (
-                            <button
-                              onClick={() => updateStatus(e.id, "CONFIRMED")}
-                              disabled={updating === e.id}
-                              className="rounded-lg bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 hover:bg-green-200 disabled:opacity-50">
-                              Confirmation de paiement
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="min-w-[980px] w-full text-sm">
+                <thead className="bg-foreground/5 text-left">
+                  <tr>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Student</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Course</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">
+                      <span className="flex items-center gap-1"><IconCalendar size={13} /> Start Date</span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">
+                      <span className="flex items-center gap-1"><IconCreditCard size={13} /> Payment</span>
+                    </th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Status</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-foreground/5">
+                  {filtered.map((e) => {
+                    const courseTitle = getCourseTitle(e.course.translations, e.course.slug);
+                    return (
+                      <tr key={e.id} className="hover:bg-foreground/[0.02]">
+                        <td className="px-5 py-4">
+                          <p className="font-semibold text-foreground">{e.lastName} {e.firstName}</p>
+                          <p className="text-xs text-foreground/40">{e.email}</p>
+                          <p className="text-xs text-foreground/30">{e.city}</p>
+                        </td>
+                        <td className="px-5 py-4">
+                          <p className="font-medium text-foreground">{courseTitle}</p>
+                          <span className="mt-1 inline-block rounded-full bg-accent/15 px-2 py-0.5 text-xs font-bold text-accent">
+                            {e.course.level}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-foreground/60 text-xs">
+                          {formatDate(e.startDate)}
+                        </td>
+                        <td className="px-5 py-4 text-foreground/60 text-xs">
+                          {e.paymentDate
+                            ? formatDate(e.paymentDate)
+                            : <span className="text-foreground/30">—</span>}
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${STATUS_STYLES[e.status]}`}>
+                            {STATUS_ICONS[e.status]}
+                            {e.status.charAt(0) + e.status.slice(1).toLowerCase()}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex flex-wrap items-center gap-2">
+                            {e.status !== "CANCELLED" && (
+                              <button
+                                onClick={() => cancelEnrollment(e.id)}
+                                disabled={updating === e.id}
+                                className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-600 hover:bg-red-100 disabled:opacity-50">
+                                Annuler l'inscription
+                              </button>
+                            )}
+                            {e.status !== "CONFIRMED" && (
+                              <button
+                                onClick={() => updateStatus(e.id, "CONFIRMED")}
+                                disabled={updating === e.id}
+                                className="rounded-lg bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700 hover:bg-green-200 disabled:opacity-50">
+                                Confirmation de paiement
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
             {filtered.length === 0 && (
               <div className="py-16 text-center">
                 <IconUsers size={32} className="mx-auto mb-3 text-foreground/20" />

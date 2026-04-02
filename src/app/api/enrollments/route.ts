@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendEnrollmentConfirmation } from "@/lib/email";
 import { Prisma } from "@/generated/prisma/client";
+import { revalidateTag } from "next/cache";
 import { limitByKey } from "@/lib/rateLimit";
 import {
   isReasonableLength,
@@ -114,7 +115,6 @@ async function createEnrollmentWithRetry(input: {
             where: { id: input.courseId },
             include: {
               translations: true,
-              _count: { select: { enrollments: true } },
             },
           });
 
@@ -122,7 +122,14 @@ async function createEnrollmentWithRetry(input: {
             throw new EnrollmentFlowError("COURSE_NOT_FOUND");
           }
 
-          if (course._count.enrollments >= course.maxCapacity) {
+          const activeEnrollments = await tx.enrollment.count({
+            where: {
+              courseId: input.courseId,
+              status: { in: ["PENDING", "CONFIRMED"] },
+            },
+          });
+
+          if (activeEnrollments >= course.maxCapacity) {
             throw new EnrollmentFlowError("COURSE_FULL");
           }
 
@@ -143,7 +150,6 @@ async function createEnrollmentWithRetry(input: {
               city: input.city,
               email: input.email,
               courseId: input.courseId,
-              locale: input.locale,
               startDate: course.startDate,
               consent: true,
             },
@@ -286,6 +292,9 @@ export async function POST(req: NextRequest) {
       price: course.price,
       locale: input.locale,
     }).catch((err) => console.error("[email] enrollment confirmation failed:", err));
+
+    revalidateTag("courses", "max");
+    revalidateTag(`course:${input.courseId}`, "max");
 
     return NextResponse.json({ success: true, enrollment }, { status: 201 });
   } catch (error) {

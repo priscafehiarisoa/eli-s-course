@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { sendEnrollmentCancellation, sendPaymentConfirmation } from "@/lib/email";
 import { writeAuditEvent } from "@/lib/audit";
+import { revalidateTag } from "next/cache";
 
 const ALLOWED_TRANSITIONS: Record<string, string[]> = {
   PENDING: ["CONFIRMED", "CANCELLED"],
@@ -72,6 +73,9 @@ export async function PATCH(
       },
     });
 
+    revalidateTag("courses", "max");
+    revalidateTag(`course:${enrollment.courseId}`, "max");
+
     return NextResponse.json(enrollment);
   } catch (error: any) {
     if (error.code === "P2025") {
@@ -138,6 +142,9 @@ export async function DELETE(
         emailWarning: emailError,
       },
     });
+
+    revalidateTag("courses", "max");
+    revalidateTag(`course:${enrollment.courseId}`, "max");
 
     return NextResponse.json({ success: true, ...(emailError && { emailWarning: emailError }) });
   } catch (error: any) {

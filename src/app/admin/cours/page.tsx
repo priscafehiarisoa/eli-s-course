@@ -141,6 +141,10 @@ export default function AdminCoursesPage() {
             <h1 className="text-3xl font-bold text-foreground">Course Management</h1>
             <p className="mt-1 text-sm text-foreground/50">{courses.length} courses total</p>
           </div>
+          
+        </div>
+
+        <div className="mb-6 flex items-center justify-end">
           <div className="flex items-center gap-3">
             <Link href="/admin/enrollments"
               className="flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm font-semibold text-foreground/70 hover:bg-foreground/5">
@@ -152,6 +156,7 @@ export default function AdminCoursesPage() {
             </button>
           </div>
         </div>
+
 
         {/* Error banner */}
         {error && !showForm && (
@@ -168,66 +173,68 @@ export default function AdminCoursesPage() {
           <div className="py-20 text-center text-foreground/40">Loading...</div>
         ) : (
           <div className="overflow-hidden rounded-2xl border border-foreground/10">
-            <table className="w-full text-sm">
-              <thead className="bg-foreground/5 text-left">
-                <tr>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Course</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Level</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Start Date</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Capacity</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Price</th>
-                  <th className="px-5 py-3 font-semibold text-foreground/60">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-foreground/5">
-                {courses.map((course) => {
-                  const title = course.translations.find((t) => t.locale === "en")?.title || course.slug;
-                  return (
-                    <tr key={course.id} className="hover:bg-foreground/[0.02]">
-                      <td className="px-5 py-4">
-                        <p className="font-semibold text-foreground">{title}</p>
-                        <p className="text-xs text-foreground/40">{course.slug}</p>
-                      </td>
-                      <td className="px-5 py-4">
-                        <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-bold text-accent">
-                          {course.level}
-                        </span>
-                      </td>
-                      <td className="px-5 py-4 text-foreground/60">
-                        {new Date(course.startDate).toLocaleDateString("de-DE")}
-                      </td>
-                      <td className="px-5 py-4 text-foreground/60">
-                        <span className="font-semibold text-foreground">{course._count?.enrollments ?? 0}</span>
-                        /{course.maxCapacity}
-                      </td>
-                      <td className="px-5 py-4 font-semibold text-foreground">{course.price}</td>
-                      <td className="px-5 py-4">
-                        {deleteConfirm === course.slug ? (
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-foreground/50">Delete?</span>
-                            <button onClick={() => handleDelete(course.slug)} className="text-red-500 hover:text-red-600">
-                              <IconCheck size={16} />
-                            </button>
-                            <button onClick={() => setDeleteConfirm(null)} className="text-foreground/40 hover:text-foreground">
-                              <IconX size={16} />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-3">
-                            <button onClick={() => openEdit(course)} className="text-foreground/40 hover:text-accent">
-                              <IconEdit size={16} />
-                            </button>
-                            <button onClick={() => setDeleteConfirm(course.slug)} className="text-foreground/40 hover:text-red-500">
-                              <IconTrash size={16} />
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto">
+              <table className="min-w-[900px] w-full text-sm">
+                <thead className="bg-foreground/5 text-left">
+                  <tr>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Course</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Level</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Start Date</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Capacity</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Price</th>
+                    <th className="px-5 py-3 font-semibold text-foreground/60">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-foreground/5">
+                  {courses.map((course) => {
+                    const title = course.translations.find((t) => t.locale === "en")?.title || course.slug;
+                    return (
+                      <tr key={course.id} className="hover:bg-foreground/[0.02]">
+                        <td className="px-5 py-4">
+                          <p className="font-semibold text-foreground">{title}</p>
+                          <p className="text-xs text-foreground/40">{course.slug}</p>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className="rounded-full bg-accent/15 px-2.5 py-0.5 text-xs font-bold text-accent">
+                            {course.level}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-foreground/60">
+                          {new Date(course.startDate).toLocaleDateString("de-DE")}
+                        </td>
+                        <td className="px-5 py-4 text-foreground/60">
+                          <span className="font-semibold text-foreground">{course._count?.enrollments ?? 0}</span>
+                          /{course.maxCapacity}
+                        </td>
+                        <td className="px-5 py-4 font-semibold text-foreground">{course.price}</td>
+                        <td className="px-5 py-4">
+                          {deleteConfirm === course.slug ? (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-foreground/50">Delete?</span>
+                              <button onClick={() => handleDelete(course.slug)} className="text-red-500 hover:text-red-600">
+                                <IconCheck size={16} />
+                              </button>
+                              <button onClick={() => setDeleteConfirm(null)} className="text-foreground/40 hover:text-foreground">
+                                <IconX size={16} />
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-3">
+                              <button onClick={() => openEdit(course)} className="text-foreground/40 hover:text-accent">
+                                <IconEdit size={16} />
+                              </button>
+                              <button onClick={() => setDeleteConfirm(course.slug)} className="text-foreground/40 hover:text-red-500">
+                                <IconTrash size={16} />
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
             {courses.length === 0 && (
               <p className="py-16 text-center text-foreground/30">No courses yet. Create your first one!</p>
             )}
