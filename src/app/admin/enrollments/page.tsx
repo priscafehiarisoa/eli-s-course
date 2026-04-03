@@ -59,15 +59,17 @@ const STATUS_ICONS = {
 };
 
 export default function AdminEnrollmentsPage() {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
-  const [pagination, setPagination] = useState<PaginationMeta>({
+  const fallbackPagination: PaginationMeta = {
     page: 1,
     limit: 25,
     total: 0,
     totalPages: 1,
     hasNextPage: false,
     hasPrevPage: false,
-  });
+  };
+
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [pagination, setPagination] = useState<PaginationMeta>(fallbackPagination);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -82,6 +84,7 @@ export default function AdminEnrollmentsPage() {
 
   const fetchEnrollments = useCallback(async () => {
     setLoading(true);
+    setEmailWarning(null);
     const params = new URLSearchParams();
     if (search) params.set("search", search);
     if (statusFilter !== "all") params.set("status", statusFilter);
@@ -89,22 +92,45 @@ export default function AdminEnrollmentsPage() {
     params.set("page", String(page));
     params.set("limit", String(limit));
 
-    const res = await fetch(`/api/enrollments?${params.toString()}`);
-    const payload = await res.json();
-    const data = Array.isArray(payload) ? payload : (payload.data ?? []);
-    const meta = Array.isArray(payload)
-      ? {
-          page,
-          limit,
-          total: data.length,
-          totalPages: 1,
-          hasNextPage: false,
-          hasPrevPage: false,
-        }
-      : payload.pagination;
-    setEnrollments(data);
-    setPagination(meta);
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/enrollments?${params.toString()}`);
+      const payload = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setEnrollments([]);
+        setPagination({ ...fallbackPagination, page, limit });
+        setEmailWarning(payload?.error || "Unable to load enrollments.");
+        return;
+      }
+
+      const data = Array.isArray(payload) ? payload : (payload?.data ?? []);
+      const meta = Array.isArray(payload)
+        ? {
+            page,
+            limit,
+            total: data.length,
+            totalPages: 1,
+            hasNextPage: false,
+            hasPrevPage: false,
+          }
+        : {
+            page: payload?.pagination?.page ?? page,
+            limit: payload?.pagination?.limit ?? limit,
+            total: payload?.pagination?.total ?? data.length,
+            totalPages: payload?.pagination?.totalPages ?? 1,
+            hasNextPage: payload?.pagination?.hasNextPage ?? false,
+            hasPrevPage: payload?.pagination?.hasPrevPage ?? false,
+          };
+
+      setEnrollments(Array.isArray(data) ? data : []);
+      setPagination(meta);
+    } catch {
+      setEnrollments([]);
+      setPagination({ ...fallbackPagination, page, limit });
+      setEmailWarning("Unable to load enrollments.");
+    } finally {
+      setLoading(false);
+    }
   }, [search, statusFilter, courseFilter, page, limit]);
 
   useEffect(() => { fetchEnrollments(); }, [fetchEnrollments]);
